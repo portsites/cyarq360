@@ -1,41 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CY Arquitetura — 360°</title>
+<title>EK Archviz — Tour 360°</title>
 <style>
   :root{
-    --bg:#0a0b0d;
-    --panel:#111317;
-    --panel2:#171a20;
-    --line:#282c34;
-    --text:#f4f5f7;
-    --muted:#969ca7;
-    --accent:#ffffff;
-    --danger:#ff5c5c;
-    --shadow:0 18px 60px rgba(0,0,0,.32);
-    --radius:18px;
+    --bg:#0a0b0d; --panel:#111317; --panel2:#171a20; --line:#282c34;
+    --text:#f4f5f7; --muted:#969ca7; --accent:#ffffff; --danger:#ff5c5c;
+    --shadow:0 18px 60px rgba(0,0,0,.32); --radius:18px;
   }
   *{box-sizing:border-box}
   html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
   body{overflow-x:hidden}
-  button,input{font:inherit}
+  button,input,select{font:inherit; outline:none;}
   button{cursor:pointer}
   .app{display:flex;min-height:100vh}
-  .sidebar{
-    width:250px;background:#0e1013;border-right:1px solid var(--line);
-    padding:26px 18px;position:fixed;inset:0 auto 0 0;z-index:20;
-  }
+  .sidebar{width:250px;background:#0e1013;border-right:1px solid var(--line);padding:26px 18px;position:fixed;inset:0 auto 0 0;z-index:20;}
   .brand{display:flex;gap:12px;align-items:center;padding:4px 10px 30px}
   .brand-mark{width:38px;height:38px;border:1px solid #4b505a;border-radius:11px;display:grid;place-items:center;font-size:13px;font-weight:800;letter-spacing:.12em}
   .brand-copy strong{display:block;font-size:14px;letter-spacing:.02em}
   .brand-copy span{display:block;color:var(--muted);font-size:11px;margin-top:2px}
   nav{display:grid;gap:7px}
-  nav button{
-    width:100%;text-align:left;background:transparent;border:0;color:#aeb4bd;
-    padding:12px 13px;border-radius:12px;font-size:13px;transition:.2s;
-  }
+  nav button{width:100%;text-align:left;background:transparent;border:0;color:#aeb4bd;padding:12px 13px;border-radius:12px;font-size:13px;transition:.2s;}
   nav button:hover,nav button.active{background:#191c21;color:#fff}
   .sidebar-footer{position:absolute;left:28px;right:28px;bottom:24px;color:#707680;font-size:11px;line-height:1.5}
   .main{margin-left:250px;flex:1;padding:28px;min-width:0}
@@ -43,14 +30,12 @@
   .eyebrow{color:#8f96a1;font-size:11px;text-transform:uppercase;letter-spacing:.14em}
   h1{font-size:29px;line-height:1.1;margin:6px 0 0;letter-spacing:-.03em}
   .top-actions{display:flex;gap:9px}
-  .btn{
-    border:1px solid var(--line);background:var(--panel);color:var(--text);
-    padding:11px 14px;border-radius:11px;font-size:12px;font-weight:650;
-  }
+  .btn{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:11px 14px;border-radius:11px;font-size:12px;font-weight:650; transition:0.2s;}
   .btn:hover{background:#191c21}
   .btn.primary{background:#fff;color:#0b0c0e;border-color:#fff}
   .btn.primary:hover{background:#e7e7e7}
   .btn.danger{color:#ff8b8b;border-color:#3b2424}
+  
   .grid-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:22px}
   .stat{background:var(--panel);border:1px solid var(--line);padding:19px;border-radius:var(--radius)}
   .stat span{color:var(--muted);font-size:11px}
@@ -58,9 +43,8 @@
   .section-head{display:flex;justify-content:space-between;gap:16px;align-items:end;margin:26px 0 13px}
   .section-head h2{font-size:17px;margin:0}
   .section-head p{font-size:12px;color:var(--muted);margin:5px 0 0}
-  .projects{
-    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:15px;
-  }
+  
+  .projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:15px;}
   .card{border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 35px rgba(0,0,0,.14)}
   .thumb{height:190px;background:#0b0c0f;position:relative;overflow:hidden}
   .thumb img{width:100%;height:100%;object-fit:cover;display:block}
@@ -72,10 +56,8 @@
   .card-actions .btn{flex:1;padding:9px 10px;font-size:11px}
   .empty{padding:48px 24px;text-align:center;border:1px dashed #30343d;border-radius:var(--radius);color:var(--muted);grid-column:1/-1}
   .empty strong{display:block;color:#dce0e5;margin-bottom:7px}
-  .modal{
-    position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);
-    display:none;align-items:center;justify-content:center;padding:22px;z-index:50;
-  }
+  
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:22px;z-index:90;}
   .modal.open{display:flex}
   .modal-card{width:min(620px,100%);background:#111317;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden; max-height: 90vh; display: flex; flex-direction: column;}
   .modal-head{display:flex;justify-content:space-between;align-items:center;padding:17px 18px;border-bottom:1px solid var(--line)}
@@ -84,44 +66,111 @@
   .modal-body{padding:18px; overflow-y:auto;}
   .field{display:grid;gap:7px;margin-bottom:15px}
   .field label{font-size:11px;color:#b6bbc3;text-transform:uppercase;letter-spacing:.09em}
-  .field input{
-    width:100%;background:#0d0f12;color:#fff;border:1px solid var(--line);
-    border-radius:11px;padding:12px;outline:none
-  }
-  .field input:focus{border-color:#646a74}
-  .drop{
-    border:1px dashed #3a3f49;background:#0d0f12;border-radius:14px;padding:27px 16px;text-align:center;
-  }
+  .field input, .field select{width:100%;background:#0d0f12;color:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;}
+  .field input:focus, .field select:focus{border-color:#646a74}
+  .drop{border:1px dashed #3a3f49;background:#0d0f12;border-radius:14px;padding:27px 16px;text-align:center;}
   .drop.drag{border-color:#fff;background:#16191e}
   .drop strong{display:block;font-size:13px}
   .drop p{font-size:11px;color:var(--muted);margin:7px 0 13px}
   .drop input{display:none}
   
-  /* ESTILOS DA LISTA DE AMBIENTES MULTIPLOS */
   .file-list { margin-top: 15px; display: grid; gap: 8px; }
   .file-item { display:flex; gap:12px; align-items:center; background:#191c21; padding:10px; border-radius:12px; border:1px solid var(--line); }
   .file-item img { width:48px; height:48px; border-radius:8px; object-fit:cover; }
-  .file-item input { flex:1; background:#0d0f12; border:1px solid var(--line); color:#fff; padding:10px 12px; border-radius:8px; font-size:12px; outline:none; }
-  .file-item input:focus { border-color:#646a74; }
+  .file-item input { flex:1; background:#0d0f12; border:1px solid var(--line); color:#fff; padding:10px 12px; border-radius:8px; font-size:12px; }
   
   .modal-foot{padding:18px; border-top:1px solid var(--line); display:flex; justify-content:flex-end; gap:8px}
   
-  /* VISUALIZADOR E BARRA DE NAVEGAÇÃO */
+  /* ========================================================
+     VISUALIZADOR 360 COM HOTSPOTS (TELETRANSPORTE)
+     ======================================================== */
   .viewer{ position:fixed; inset:0; background:#000; display:none; z-index:70; }
   .viewer.open{display:block}
   #viewerCanvas{position:absolute; inset:0; width:100%; height:100%; display:block}
-  .viewer-top{ position:absolute; left:18px; right:18px; top:18px; display:flex; align-items:center; justify-content:space-between; pointer-events:none; }
+  
+  #fadeOverlay { 
+      position:absolute; inset:0; background:#08090b; z-index:75; 
+      transition:opacity 0.4s ease; pointer-events:none; opacity:1; 
+      display:flex; align-items:center; justify-content:center; 
+  }
+  .spinner { 
+      width: 44px; height: 44px; border: 4px solid rgba(255,255,255,0.1); 
+      border-top-color: #fff; border-radius: 50%; 
+      animation: spin 1s linear infinite; display: none; 
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  
+  .viewer-top{ position:absolute; left:18px; right:18px; top:18px; display:flex; align-items:center; justify-content:space-between; pointer-events:none; z-index:80; }
   .viewer-top > *{pointer-events:auto}
   .viewer-title{background:rgba(10,11,14,.68);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(12px);padding:10px 12px;border-radius:12px}
   .viewer-title strong{font-size:12px}
   .viewer-title span{font-size:10px;color:#aeb4bd;margin-left:8px;text-transform:uppercase;letter-spacing:1px;}
-  .viewer-close{border:1px solid rgba(255,255,255,.13);background:rgba(10,11,14,.68);color:#fff;border-radius:10px;padding:10px 12px}
+  .viewer-close{border:1px solid rgba(255,255,255,.13);background:rgba(10,11,14,.68);color:#fff;border-radius:10px;padding:10px 12px; transition:0.2s;}
+  .viewer-close:hover{background:rgba(255,50,50,0.8);}
   
-  .viewer-nav { position:absolute; bottom:24px; left:50%; transform:translateX(-50%); display:flex; gap:8px; background:rgba(10,11,14,.68); padding:8px; border-radius:14px; backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.13); max-width:90%; overflow-x:auto; pointer-events:auto;}
-  .viewer-nav button { background:transparent; border:0; color:#aeb4bd; padding:10px 16px; border-radius:10px; font-size:12px; font-weight:600; white-space:nowrap; transition:.2s; }
-  .viewer-nav button.active, .viewer-nav button:hover { background:rgba(255,255,255,.15); color:#fff; }
+  /* Controles Admin no Viewer */
+  #adminEditorTools {
+      position: absolute; top: 80px; right: 18px; z-index: 80;
+      background: rgba(10,11,14,0.8); border: 1px solid rgba(255,255,255,0.2);
+      padding: 12px; border-radius: 12px; backdrop-filter: blur(10px);
+      display: none; flex-direction: column; gap: 8px; align-items: flex-end;
+  }
+  #adminEditorTools p { margin:0 0 6px 0; font-size:11px; color:#aeb4bd; text-align:right;}
 
-  .toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);opacity:0;background:#fff;color:#0a0b0d;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;transition:.25s;z-index:100; pointer-events:none;}
+  /* HOTSPOTS 3D (Pontos clicáveis no ambiente) */
+  #hotspotsContainer { position:absolute; inset:0; pointer-events:none; z-index:72; overflow:hidden;}
+  .hotspot-point {
+      position:absolute; transform:translate(-50%, -50%);
+      width:36px; height:36px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; pointer-events:auto; transition:0.2s;
+  }
+  /* Animação do pino */
+  .hotspot-point::before {
+      content:''; position:absolute; width:100%; height:100%;
+      border-radius:50%; border:2px solid rgba(255,255,255,0.6);
+      animation: pulse 1.5s infinite;
+  }
+  .hotspot-point::after {
+      content:''; position:absolute; width:12px; height:12px;
+      background:#fff; border-radius:50%; box-shadow:0 0 10px rgba(0,0,0,0.5);
+  }
+  .hotspot-point:hover { transform:translate(-50%, -50%) scale(1.3); }
+  @keyframes pulse { 0%{transform:scale(0.8); opacity:1;} 100%{transform:scale(2); opacity:0;} }
+  
+  /* Tooltip do ambiente de destino */
+  .hotspot-tooltip {
+      position:absolute; bottom:40px; background:rgba(0,0,0,0.8);
+      color:#fff; padding:6px 12px; border-radius:8px; font-size:12px;
+      font-weight:bold; white-space:nowrap; opacity:0;
+      transform:translateY(10px); transition:0.3s; pointer-events:none;
+      border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(5px);
+  }
+  .hotspot-point:hover .hotspot-tooltip { opacity:1; transform:translateY(0); }
+  
+  /* Carrossel de Miniaturas */
+  .viewer-nav { 
+      position:absolute; bottom:24px; left:50%; transform:translateX(-50%); 
+      display:flex; gap:12px; background:rgba(10,11,14,0.3); padding:12px; 
+      border-radius:18px; backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.1); 
+      max-width:92%; overflow-x:auto; pointer-events:auto; z-index:80; 
+      scrollbar-width: none; box-shadow:0 10px 30px rgba(0,0,0,0.5); 
+  }
+  .viewer-nav::-webkit-scrollbar { display: none; }
+  .thumb-item { 
+      position:relative; width:94px; height:64px; border-radius:10px; 
+      overflow:hidden; cursor:pointer; flex-shrink:0; border:2px solid transparent; 
+      transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+      box-shadow:0 4px 12px rgba(0,0,0,0.4); background:#111; 
+  }
+  .thumb-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s ease; opacity:0.75; }
+  .thumb-item:hover img { transform:scale(1.15); opacity:1; }
+  .thumb-item::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); pointer-events:none; }
+  .thumb-item span { position:absolute; bottom:6px; left:6px; right:6px; color:#fff; font-size:10px; font-weight:600; text-align:center; z-index:2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-shadow:0 1px 3px rgba(0,0,0,0.9); pointer-events:none; }
+  .thumb-item.active { border-color:#fff; transform:translateY(-5px); box-shadow:0 8px 20px rgba(0,0,0,0.6); }
+  .thumb-item.active img { opacity:1; }
+
+  .toast{position:fixed;left:50%;bottom:120px;transform:translate(-50%,20px);opacity:0;background:#fff;color:#0a0b0d;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;transition:.25s;z-index:100; pointer-events:none;}
   .toast.show{opacity:1;transform:translate(-50%,0)}
   @media(max-width:800px){
     .sidebar{width:72px;padding:20px 10px}
@@ -167,7 +216,7 @@
     </div>
 
     <div class="section-head">
-      <div><h2>O seu catálogo</h2><p>Abra, visualize ou partilhe tours multicena com os seus clientes.</p></div>
+      <div><h2>Seu catálogo</h2><p>Abra, visualize ou crie pontos de navegação (hotspots).</p></div>
     </div>
     <div id="projects" class="projects"></div>
   </main>
@@ -180,18 +229,15 @@
     <div class="modal-body">
       <div class="field">
         <label>Nome do Projeto (Ex: Residência Alves)</label>
-        <input id="projectName" type="text" maxlength="80" placeholder="Digite o nome principal do projeto..." />
+        <input id="projectName" type="text" maxlength="80" placeholder="Digite o nome principal..." />
       </div>
       <div id="drop" class="drop">
         <strong>Selecione as fotos dos ambientes</strong>
-        <p>Pode selecionar vários ficheiros (Quarto, Sala, etc). Até 32MB por foto.</p>
+        <p>Selecione todas as fotos juntas. Depois, ligaremos os ambientes através dos Hotspots.</p>
         <label class="btn" for="fileInput">Escolher Imagens</label>
         <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" multiple />
       </div>
-      
-      <!-- Lista onde aparecem as fotos escolhidas com campo de nome -->
       <div id="fileList" class="file-list"></div>
-      
     </div>
     <div class="modal-foot">
       <button class="btn" onclick="closeModal()">Cancelar</button>
@@ -202,7 +248,12 @@
 
 <!-- Visualizador 360 -->
 <div id="viewer" class="viewer">
+  <div id="fadeOverlay"><div class="spinner" id="fadeSpinner"></div></div>
   <canvas id="viewerCanvas"></canvas>
+  
+  <!-- Container para os Hotspots Clicáveis -->
+  <div id="hotspotsContainer"></div>
+  
   <div class="viewer-top">
     <div class="viewer-title">
         <strong id="viewerName">Projeto</strong>
@@ -211,22 +262,46 @@
     <button class="viewer-close" onclick="closeViewer()">Fechar Tour</button>
   </div>
   
-  <!-- Navegação entre quartos/ambientes -->
+  <!-- Ferramenta de Criação de Hotspots (Visível apenas para o Admin) -->
+  <div id="adminEditorTools">
+      <p>Olhe para uma porta/corredor e clique abaixo:</p>
+      <button class="btn primary" onclick="abrirModalHotspot()">+ Adicionar Ponto Aqui</button>
+  </div>
+  
+  <!-- Carrossel de Miniaturas -->
   <div class="viewer-nav" id="viewerNav"></div>
+</div>
+
+<!-- Modal para Escolher o Destino do Hotspot (Admin) -->
+<div id="modalHotspot" class="modal" style="z-index:100;">
+    <div class="modal-card" style="width:400px;">
+        <div class="modal-head"><strong>Criar Teletransporte</strong><button class="close" onclick="fecharModalHotspot()">×</button></div>
+        <div class="modal-body">
+            <div class="field">
+                <label>Para qual ambiente esta porta leva?</label>
+                <select id="hotspotDestino"></select>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn" onclick="fecharModalHotspot()">Cancelar</button>
+            <button class="btn primary" onclick="salvarHotspot()">Adicionar Ponto</button>
+        </div>
+    </div>
 </div>
 
 <div id="about" class="modal">
   <div class="modal-card">
     <div class="modal-head"><strong>Sobre o sistema</strong><button class="close" onclick="document.getElementById('about').classList.remove('open')">×</button></div>
     <div class="modal-body" style="color:#b9bec6;font-size:12px;line-height:1.7">
-      Esta versão inclui o <b>Tour Virtual Multicena</b>. Pode carregar várias imagens num só projeto, identificar cada ambiente (Quarto, Cozinha, Fachada), e o cliente conseguirá navegar por todas elas através de um menu dinâmico no mesmo link!
+      Esta versão Premium conta com <b>Pontos de Teletransporte (Hotspots) no espaço 3D</b>.<br><br>
+      Abra o seu projeto, posicione a câmara a olhar para uma passagem, clique em <b>+ Adicionar Ponto Aqui</b> e escolha o ambiente de destino. O seu cliente conseguirá caminhar de uma divisão para a outra clicando diretamente nas portas!
     </div>
   </div>
 </div>
 
 <div id="toast" class="toast"></div>
 
-<!-- Importação do Three.js para o Visualizador -->
+<!-- Importação do Three.js -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
 // ==========================================
@@ -234,12 +309,13 @@
 const IMGBB_API_KEY = "e0eda73472324c4a7cff8c0841956d57";
 // ==========================================
 
-const DB_NAME = "cy360db2"; // Atualizado para nova estrutura
+const DB_NAME = "cy360db4"; // Banco atualizado para suportar hotspots
 const STORE = "projects";
 let db;
 let projectsCache = [];
-let selectedFiles = []; // Agora guarda multiplos ficheiros
-let viewerState = null; // { name: '...', images: [...], currentIndex: 0 }
+let selectedFiles = []; 
+let viewerState = null; 
+let isClientMode = false; // Define se estamos na visão de administrador ou cliente
 
 function toast(msg){
   const el=document.getElementById('toast');
@@ -247,7 +323,6 @@ function toast(msg){
   clearTimeout(window.__toast); window.__toast=setTimeout(()=>el.classList.remove('show'),2200);
 }
 
-// Configuração do IndexedDB Local
 function openDB(){
   return new Promise((resolve,reject)=>{
     const req=indexedDB.open(DB_NAME,1);
@@ -275,7 +350,6 @@ function del(id){
   });
 }
 
-// Renderizar Galeria (Cards)
 async function renderProjects(){
   projectsCache=await getAll();
   document.getElementById('count').textContent=projectsCache.length;
@@ -288,14 +362,14 @@ async function renderProjects(){
   wrap.innerHTML=projectsCache.map(p=>`
     <article class="card">
       <div class="thumb">
-        <img src="${p.images[0].url}" alt="${escapeHtml(p.name)}" crossorigin="anonymous">
+        <img src="${p.images[0].thumb || p.images[0].url}" alt="${escapeHtml(p.name)}" crossorigin="anonymous">
         <div class="badge">${p.images.length} Ambientes</div>
       </div>
       <div class="card-body">
         <div class="card-title" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</div>
-        <div class="card-date">Criado em ${new Date(p.createdAt).toLocaleDateString('pt-PT')}</div>
+        <div class="card-date">Criado em ${new Date(p.createdAt).toLocaleDateString('pt-BR')}</div>
         <div class="card-actions">
-          <button class="btn primary" onclick="openViewer('${p.id}')">Ver Tour</button>
+          <button class="btn primary" onclick="openViewer('${p.id}')">Editar / Ver</button>
           <button class="btn" onclick="shareProject('${p.id}')">Partilhar</button>
           <button class="btn danger" onclick="removeProject('${p.id}')">Excluir</button>
         </div>
@@ -303,11 +377,8 @@ async function renderProjects(){
     </article>`).join('');
 }
 
-function escapeHtml(s){
-  return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-}
+function escapeHtml(s){ return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
 
-// ==== GESTÃO DE MÚLTIPLOS ARQUIVOS ====
 function openAdd(){
   document.getElementById('modal').classList.add('open');
   setTimeout(()=>document.getElementById('projectName').focus(),50);
@@ -320,15 +391,11 @@ function closeModal(){
   renderFileList();
 }
 
-document.getElementById('fileInput').addEventListener('change',e=>{
-  adicionarArquivos(e.target.files);
-});
+document.getElementById('fileInput').addEventListener('change',e=>{ adicionarArquivos(e.target.files); });
 const drop=document.getElementById('drop');
 ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
-drop.addEventListener('drop',e=>{
-  adicionarArquivos(e.dataTransfer.files);
-});
+drop.addEventListener('drop',e=>{ adicionarArquivos(e.dataTransfer.files); });
 
 function adicionarArquivos(files) {
     for(let f of files) {
@@ -344,35 +411,27 @@ function renderFileList() {
     list.innerHTML = selectedFiles.map((item, index) => `
         <div class="file-item">
             <img src="${item.preview}" alt="Preview">
-            <input type="text" placeholder="Nome do ambiente (Ex: Quarto Casal, Cozinha...)" 
+            <input type="text" placeholder="Nome (Ex: Sala de Estar)" 
                    value="${item.label}" onchange="selectedFiles[${index}].label = this.value">
             <button class="close" onclick="removerArquivo(${index})" title="Remover">&times;</button>
         </div>
     `).join('');
 }
+window.removerArquivo = function(index) { selectedFiles.splice(index, 1); renderFileList(); };
 
-window.removerArquivo = function(index) {
-    selectedFiles.splice(index, 1);
-    renderFileList();
-};
-
-// Envio para a API do ImgBB (Sequencial)
 async function saveProject(){
   const name=document.getElementById('projectName').value.trim();
   if(!name) return toast('Digite o nome do projeto.');
-  if(selectedFiles.length === 0) return toast('Selecione pelo menos um ambiente 360°.');
+  if(selectedFiles.length === 0) return toast('Selecione pelo menos um ambiente.');
 
   const btn = document.getElementById('saveBtn');
   const originalText = btn.textContent;
   btn.disabled = true;
-
   let imagensSalvas = [];
 
-  // Enviar cada imagem uma por uma para o ImgBB
   for (let i = 0; i < selectedFiles.length; i++) {
       let f = selectedFiles[i];
-      btn.textContent = `A enviar ${i+1} de ${selectedFiles.length}... Aguarde`;
-
+      btn.textContent = `Enviando ${i+1} de ${selectedFiles.length}...`;
       const formData = new FormData();
       formData.append("image", f.file);
 
@@ -382,65 +441,49 @@ async function saveProject(){
           if (json.success) {
               imagensSalvas.push({
                   label: f.label.trim() || `Ambiente ${i+1}`,
-                  url: json.data.url
+                  url: json.data.url,
+                  thumb: json.data.thumb.url,
+                  hotspots: [] // Array inicializado para receber os atalhos de portas
               });
-          } else {
-              throw new Error("Erro no ImgBB");
-          }
+          } else { throw new Error("Erro"); }
       } catch (e) {
-          toast(`Erro ao enviar a imagem ${i+1}. Tente novamente.`);
-          btn.textContent = originalText;
-          btn.disabled = false;
-          return; // Para o processo
+          toast(`Erro ao enviar a imagem ${i+1}.`);
+          btn.textContent = originalText; btn.disabled = false; return; 
       }
   }
 
-  // Guardar no banco de dados local com o array de imagens
   await put({id:crypto.randomUUID(), name: name, images: imagensSalvas, createdAt:Date.now()});
-  closeModal();
-  await renderProjects();
-  toast('Tour salvo com sucesso!');
-  btn.textContent = originalText;
-  btn.disabled = false;
+  closeModal(); await renderProjects(); toast('Tour criado! Abra-o para colocar os pontos nas portas.');
+  btn.textContent = originalText; btn.disabled = false;
 }
 
 async function removeProject(id){
-  const p=projectsCache.find(x=>x.id===id);
-  if(!p) return;
-  if(!confirm(`Excluir tour completo de "${p.name}"?`)) return;
+  if(!confirm(`Excluir tour completo?`)) return;
   await del(id); await renderProjects(); toast('Tour eliminado.');
 }
 
-// ==== PARTILHA INTELIGENTE (MÚLTIPLOS AMBIENTES NO LINK) ====
-// Transforma os dados em texto comprimido para o URL não ficar gigante
-function encodeData(obj) {
-    return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
-}
-function decodeData(b64) {
-    return JSON.parse(decodeURIComponent(escape(atob(b64))));
-}
+function encodeData(obj) { return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); }
+function decodeData(b64) { return JSON.parse(decodeURIComponent(escape(atob(b64)))); }
 
 async function shareProject(id){
   const p=projectsCache.find(x=>x.id===id); if(!p)return;
+  // Empacota os dados de forma enxuta para o URL: l=label, u=url, t=thumb, h=hotspots
+  const dadosEnxutos = p.images.map(img => ({ 
+      l: img.label, u: img.url, t: img.thumb, 
+      h: (img.hotspots || []).map(hs => ({p: Math.round(hs.pitch), y: Math.round(hs.yaw), d: hs.destino}))
+  }));
   
-  // Extrai apenas os rótulos e URLs para poupar espaço no link
-  const dadosEnxutos = p.images.map(img => ({ l: img.label, u: img.url }));
   const linkDados = encodeData(dadosEnxutos);
-  
   const publicLink = location.href.split('?')[0].split('#')[0] + '?p=' + encodeURIComponent(p.name) + '&t=' + linkDados;
   
   const shareData={title:`Tour 360°: ${p.name}`, text:`Viaje pelos ambientes do projeto ${p.name}.`, url: publicLink};
-  if(navigator.share){
-    try{await navigator.share(shareData)}catch(e){}
-  }else{
-    await navigator.clipboard.writeText(publicLink);
-    toast('Link copiado! Envie ao cliente para aceder ao Tour.');
-  }
+  if(navigator.share){ try{await navigator.share(shareData)}catch(e){} }
+  else{ await navigator.clipboard.writeText(publicLink); toast('Link copiado! Envie ao cliente.'); }
 }
 
-// ==== VISUALIZADOR 360 ====
+// ==== VISUALIZADOR 360 (Three.js) ====
 let scene,camera,renderer,sphere,texture;
-const state={yaw:0,pitch:0,fov:75,drag:false,lastX:0,lastY:0};
+const state={yaw:0,pitch:0,fov:75,drag:false,lastX:0,lastY:0, vYaw:0, vPitch:0, autoRotate:true};
 
 function initViewer(){
   const canvas=document.getElementById('viewerCanvas');
@@ -454,116 +497,248 @@ function initViewer(){
       animate();
   }
 }
+
 function animate(){
   requestAnimationFrame(animate);
   if(!viewerState) return;
+
+  if(!state.drag) {
+      state.vYaw *= 0.92; state.vPitch *= 0.92;
+      if(state.autoRotate && Math.abs(state.vYaw) < 0.01) { state.vYaw = -0.04; }
+  }
+  
+  state.yaw += state.vYaw; state.pitch += state.vPitch;
+  state.pitch = Math.max(-85, Math.min(85, state.pitch));
+
   const phi=THREE.MathUtils.degToRad(90-state.pitch);
   const theta=THREE.MathUtils.degToRad(state.yaw);
   const x=Math.sin(phi)*Math.cos(theta), y=Math.cos(phi), z=Math.sin(phi)*Math.sin(theta);
-  camera.lookAt(x,y,z);
-  camera.fov=state.fov; camera.updateProjectionMatrix();
-  renderer.render(scene,camera);
+  camera.lookAt(x,y,z); camera.fov=state.fov; camera.updateProjectionMatrix();
+  if(renderer) renderer.render(scene,camera);
+  
+  // Atualiza as posições dos Hotspots de acordo com o movimento da câmara
+  renderHotspotsNaTela();
 }
 
-function load360(image){
-  const loader = new THREE.TextureLoader();
-  loader.setCrossOrigin('anonymous');
-  
+function load360(image, callback){
+  const loader = new THREE.TextureLoader(); loader.setCrossOrigin('anonymous');
   texture=loader.load(image,()=>{
     if(sphere){scene.remove(sphere);sphere.geometry.dispose();sphere.material.dispose();}
     sphere=new THREE.Mesh(new THREE.SphereGeometry(100,96,64),new THREE.MeshBasicMaterial({map:texture,side:THREE.BackSide}));
     sphere.scale.x=-1; scene.add(sphere);
-    state.yaw = 0; state.pitch = 0; state.fov = 75; // Reseta visão ao trocar quarto
+    state.yaw = 0; state.pitch = 0; state.fov = 75; state.autoRotate = true; 
+    if(callback) callback();
   });
 }
 
-// Carrega uma cena específica do Tour
+// ==== GESTÃO DE HOTSPOTS NA TELA ====
+function renderHotspotsNaTela() {
+    const container = document.getElementById('hotspotsContainer');
+    if(!viewerState || !camera) return;
+    
+    const currentImg = viewerState.images[viewerState.currentIndex];
+    const hotspots = currentImg.hotspots || currentImg.h || [];
+
+    // Cria/Remove elementos HTML se a quantidade mudar (ao mudar de sala)
+    if(container.children.length !== hotspots.length) {
+        container.innerHTML = '';
+        hotspots.forEach((hs, idx) => {
+            const el = document.createElement('div');
+            el.className = 'hotspot-point';
+            const destinoIdx = hs.destino !== undefined ? hs.destino : hs.d;
+            const destRoom = viewerState.images[destinoIdx];
+            const destName = destRoom ? (destRoom.label || destRoom.l) : "Ambiente";
+            
+            el.innerHTML = `<div class="hotspot-tooltip">Ir para ${escapeHtml(destName)}</div>`;
+            
+            // Impede que clicar no hotspot ative o "arrastar" da tela
+            el.addEventListener('pointerdown', (e) => e.stopPropagation());
+            
+            el.onclick = () => {
+                if(!isClientMode && confirm(`Navegar para ${destName} ou REMOVER este ponto?\n\n[OK] para Navegar\n[Cancelar] para Remover`)) {
+                    mudarCena(destinoIdx);
+                } else if(!isClientMode) {
+                    // Remover hotspot em modo admin
+                    currentImg.hotspots.splice(idx, 1);
+                    put(viewerState.projectRef); // Salva no banco
+                    renderHotspotsNaTela();
+                    toast('Ponto removido!');
+                } else {
+                    // Modo Cliente: Apenas viaja!
+                    mudarCena(destinoIdx);
+                }
+            };
+            container.appendChild(el);
+        });
+    }
+
+    // Calcula onde cada ponto 3D deve aparecer na tela 2D
+    const children = container.children;
+    hotspots.forEach((hs, i) => {
+        const el = children[i];
+        const pitch = hs.pitch !== undefined ? hs.pitch : hs.p;
+        const yaw = hs.yaw !== undefined ? hs.yaw : hs.y;
+        
+        const phi = THREE.MathUtils.degToRad(90 - pitch);
+        const theta = THREE.MathUtils.degToRad(yaw);
+        
+        // Projetar vetor 3D para o ecrã
+        const vector = new THREE.Vector3( 50 * Math.sin(phi) * Math.cos(theta), 50 * Math.cos(phi), 50 * Math.sin(phi) * Math.sin(theta) );
+        vector.project(camera);
+
+        if (vector.z > 1) {
+            el.style.display = 'none'; // Está nas costas da câmara
+        } else {
+            el.style.display = 'flex';
+            const x = (vector.x * 0.5 + 0.5) * innerWidth;
+            const y = (vector.y * -0.5 + 0.5) * innerHeight;
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+        }
+    });
+}
+
+// ==== CRIAÇÃO DE HOTSPOTS (ADMIN) ====
+function abrirModalHotspot() {
+    state.autoRotate = false; // Para a tela de girar
+    const modal = document.getElementById('modalHotspot');
+    const select = document.getElementById('hotspotDestino');
+    select.innerHTML = '';
+    
+    // Lista os outros ambientes
+    viewerState.images.forEach((img, i) => {
+        if (i !== viewerState.currentIndex) {
+            select.innerHTML += `<option value="${i}">${escapeHtml(img.label || img.l)}</option>`;
+        }
+    });
+    
+    if(select.children.length === 0) {
+        toast("Precisa ter mais de 1 ambiente no tour para criar atalhos!");
+        return;
+    }
+    modal.classList.add('open');
+}
+
+function fecharModalHotspot() { document.getElementById('modalHotspot').classList.remove('open'); }
+
+function salvarHotspot() {
+    const destinoIndex = parseInt(document.getElementById('hotspotDestino').value);
+    const imgData = viewerState.images[viewerState.currentIndex];
+    
+    if(!imgData.hotspots) imgData.hotspots = [];
+    
+    // Grava as coordenadas exatas para onde a câmara está a olhar agora!
+    imgData.hotspots.push({
+        yaw: state.yaw,
+        pitch: state.pitch,
+        destino: destinoIndex
+    });
+    
+    // Atualiza o banco de dados
+    put(viewerState.projectRef).then(() => {
+        document.getElementById('hotspotsContainer').innerHTML = ''; // Força recriar
+        fecharModalHotspot();
+        toast('Ponto criado com sucesso! Gire a tela para ver.');
+    });
+}
+
+// ==== NAVEGAÇÃO E TRANSIÇÃO ====
 window.mudarCena = function(index) {
     if(!viewerState || !viewerState.images[index]) return;
+    if(viewerState.loadedIndex === index) return; 
     viewerState.currentIndex = index;
     
-    const ambiente = viewerState.images[index];
-    document.getElementById('viewerName').textContent = viewerState.name;
-    document.getElementById('viewerEnv').textContent = ambiente.label || ambiente.l;
+    const overlay = document.getElementById('fadeOverlay');
+    const spinner = document.getElementById('fadeSpinner');
+    overlay.style.opacity = '1'; spinner.style.display = 'block'; 
+    document.getElementById('hotspotsContainer').innerHTML = ''; // Limpa pontos velhos
     
-    load360(ambiente.url || ambiente.u);
-    
-    // Atualiza botão ativo na navegação inferior
     const botoes = document.getElementById('viewerNav').children;
-    for(let i=0; i<botoes.length; i++){
-        botoes[i].classList.toggle('active', i === index);
-    }
+    for(let i=0; i<botoes.length; i++){ botoes[i].classList.toggle('active', i === index); }
+    
+    setTimeout(() => {
+        const ambiente = viewerState.images[index];
+        document.getElementById('viewerName').textContent = viewerState.name;
+        document.getElementById('viewerEnv').textContent = ambiente.label || ambiente.l;
+        
+        load360(ambiente.url || ambiente.u, () => {
+            viewerState.loadedIndex = index;
+            overlay.style.opacity = '0'; 
+            setTimeout(() => spinner.style.display = 'none', 400);
+        });
+    }, 400); 
 }
 
 function openViewer(id){
   const p=projectsCache.find(x=>x.id===id); if(!p)return;
   document.getElementById('viewer').classList.add('open');
-  viewerState = { name: p.name, images: p.images, currentIndex: 0 };
   
-  initViewer();
-  montarMenuNavegacao();
-  mudarCena(0); // Abre o primeiro quarto
+  // Mostra botão de editar hotspots apenas para o Admin
+  isClientMode = false;
+  document.getElementById('adminEditorTools').style.display = 'flex';
+  
+  viewerState = { projectRef: p, name: p.name, images: p.images, currentIndex: 0, loadedIndex: -1 };
+  
+  initViewer(); montarMenuNavegacao(); mudarCena(0); 
 }
 
 function montarMenuNavegacao() {
     const nav = document.getElementById('viewerNav');
-    if(viewerState.images.length <= 1) {
-        nav.style.display = 'none'; // Esconde menu se só tiver 1 foto
-        return;
-    }
+    if(viewerState.images.length <= 1) { nav.style.display = 'none'; return; }
     nav.style.display = 'flex';
     nav.innerHTML = viewerState.images.map((img, index) => {
-        const nome = img.label || img.l || `Amb. ${index+1}`;
-        return `<button onclick="mudarCena(${index})">${escapeHtml(nome)}</button>`;
+        const nome = img.label || img.l || `Ambiente ${index+1}`;
+        const miniatura = img.thumb || img.t || img.url || img.u; 
+        return `<div class="thumb-item" onclick="mudarCena(${index})">
+            <img src="${miniatura}" crossorigin="anonymous" loading="lazy" />
+            <span>${escapeHtml(nome)}</span>
+        </div>`;
     }).join('');
 }
 
-function closeViewer(){
-  document.getElementById('viewer').classList.remove('open');
-  viewerState=null;
-}
+function closeViewer(){ document.getElementById('viewer').classList.remove('open'); viewerState=null; }
+
 const canvas=document.getElementById('viewerCanvas');
-canvas.addEventListener('pointerdown',e=>{state.drag=true;state.lastX=e.clientX;state.lastY=e.clientY;canvas.setPointerCapture(e.pointerId)});
+canvas.addEventListener('pointerdown',e=>{
+    state.drag=true; state.autoRotate=false; 
+    state.lastX=e.clientX; state.lastY=e.clientY;
+    state.vYaw = 0; state.vPitch = 0;
+    canvas.setPointerCapture(e.pointerId);
+});
 canvas.addEventListener('pointermove',e=>{
   if(!state.drag)return;
   const dx=e.clientX-state.lastX,dy=e.clientY-state.lastY;
-  state.yaw-=dx*.16;state.pitch-=dy*.12;state.pitch=Math.max(-85,Math.min(85,state.pitch));
-  state.lastX=e.clientX;state.lastY=e.clientY;
+  state.vYaw = -dx * 0.08; state.vPitch = -dy * 0.08;
+  state.lastX=e.clientX; state.lastY=e.clientY;
 });
 canvas.addEventListener('pointerup',()=>state.drag=false);
 canvas.addEventListener('pointercancel',()=>state.drag=false);
 canvas.addEventListener('wheel',e=>{e.preventDefault();state.fov=Math.max(40,Math.min(95,state.fov+e.deltaY*.04))},{passive:false});
-window.addEventListener('resize',()=>{
-  if(renderer){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
-});
+window.addEventListener('resize',()=>{ if(renderer){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();} });
 
 function showAbout(){document.getElementById('about').classList.add('open')}
-window.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeViewer();closeModal();document.getElementById('about').classList.remove('open')}
-});
+window.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeViewer();closeModal();document.getElementById('about').classList.remove('open'); fecharModalHotspot();} });
 
-// Inicialização: Verifica se é Admin (Painel) ou Cliente (Apenas visualizador)
+// Inicialização: Cliente ou Admin
 (async()=>{
   const urlParams = new URLSearchParams(window.location.search);
-  const tourData = urlParams.get('t'); // Pega os dados empacotados
+  const tourData = urlParams.get('t'); 
   const clientName = urlParams.get('p') || 'Tour 360°';
 
   if (tourData) {
-      // MODO CLIENTE: Esconde o painel principal e o botão fechar
+      // MODO CLIENTE
+      isClientMode = true;
       document.querySelector('.app').style.display = 'none';
-      const closeBtn = document.querySelector('.viewer-close');
-      if(closeBtn) closeBtn.style.display = 'none';
+      document.querySelector('.viewer-close').style.display = 'none';
+      document.getElementById('adminEditorTools').style.display = 'none';
 
-      // Abre o Tour em ecrã inteiro
       const imagensExtraidas = decodeData(tourData);
-      viewerState = { name: clientName, images: imagensExtraidas, currentIndex: 0 };
+      viewerState = { name: clientName, images: imagensExtraidas, currentIndex: 0, loadedIndex: -1 };
       
       document.getElementById('viewer').classList.add('open');
-      initViewer();
-      montarMenuNavegacao();
-      mudarCena(0);
+      initViewer(); montarMenuNavegacao(); mudarCena(0);
   } else {
-      // MODO ADMIN: Carrega o painel normal
+      // MODO ADMIN
       await openDB(); await renderProjects();
   }
 })();
