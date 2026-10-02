@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CY Arquitetura — 360°</title>
+<style>
+  :root{
+    --bg:#0a0b0d;
+    --panel:#111317;
+    --panel2:#171a20;
+    --line:#282c34;
+    --text:#f4f5f7;
+    --muted:#969ca7;
+    --accent:#ffffff;
+    --danger:#ff5c5c;
+    --shadow:0 18px 60px rgba(0,0,0,.32);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  body{overflow-x:hidden}
+  button,input{font:inherit}
+  button{cursor:pointer}
+  .app{display:flex;min-height:100vh}
+  .sidebar{
+    width:250px;background:#0e1013;border-right:1px solid var(--line);
+    padding:26px 18px;position:fixed;inset:0 auto 0 0;z-index:20;
+  }
+  .brand{display:flex;gap:12px;align-items:center;padding:4px 10px 30px}
+  .brand-mark{width:38px;height:38px;border:1px solid #4b505a;border-radius:11px;display:grid;place-items:center;font-size:13px;font-weight:800;letter-spacing:.12em}
+  .brand-copy strong{display:block;font-size:14px;letter-spacing:.02em}
+  .brand-copy span{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+  nav{display:grid;gap:7px}
+  nav button{
+    width:100%;text-align:left;background:transparent;border:0;color:#aeb4bd;
+    padding:12px 13px;border-radius:12px;font-size:13px;transition:.2s;
+  }
+  nav button:hover,nav button.active{background:#191c21;color:#fff}
+  .sidebar-footer{position:absolute;left:28px;right:28px;bottom:24px;color:#707680;font-size:11px;line-height:1.5}
+  .main{margin-left:250px;flex:1;padding:28px;min-width:0}
+  .topbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:28px}
+  .eyebrow{color:#8f96a1;font-size:11px;text-transform:uppercase;letter-spacing:.14em}
+  h1{font-size:29px;line-height:1.1;margin:6px 0 0;letter-spacing:-.03em}
+  .top-actions{display:flex;gap:9px}
+  .btn{
+    border:1px solid var(--line);background:var(--panel);color:var(--text);
+    padding:11px 14px;border-radius:11px;font-size:12px;font-weight:650;
+  }
+  .btn:hover{background:#191c21}
+  .btn.primary{background:#fff;color:#0b0c0e;border-color:#fff}
+  .btn.primary:hover{background:#e7e7e7}
+  .btn.danger{color:#ff8b8b;border-color:#3b2424}
+  .grid-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:22px}
+  .stat{background:var(--panel);border:1px solid var(--line);padding:19px;border-radius:var(--radius)}
+  .stat span{color:var(--muted);font-size:11px}
+  .stat strong{display:block;font-size:29px;margin-top:8px;letter-spacing:-.04em}
+  .section-head{display:flex;justify-content:space-between;gap:16px;align-items:end;margin:26px 0 13px}
+  .section-head h2{font-size:17px;margin:0}
+  .section-head p{font-size:12px;color:var(--muted);margin:5px 0 0}
+  .projects{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:15px;
+  }
+  .card{border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 35px rgba(0,0,0,.14)}
+  .thumb{height:190px;background:#0b0c0f;position:relative;overflow:hidden}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb .badge{position:absolute;top:11px;left:11px;padding:6px 8px;border-radius:8px;background:rgba(0,0,0,.68);backdrop-filter:blur(8px);font-size:10px}
+  .card-body{padding:14px}
+  .card-title{font-size:14px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card-date{font-size:11px;color:var(--muted)}
+  .card-actions{display:flex;gap:7px;margin-top:13px}
+  .card-actions .btn{flex:1;padding:9px 10px;font-size:11px}
+  .empty{padding:48px 24px;text-align:center;border:1px dashed #30343d;border-radius:var(--radius);color:var(--muted);grid-column:1/-1}
+  .empty strong{display:block;color:#dce0e5;margin-bottom:7px}
+  .modal{
+    position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);
+    display:none;align-items:center;justify-content:center;padding:22px;z-index:50;
+  }
+  .modal.open{display:flex}
+  .modal-card{width:min(620px,100%);background:#111317;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden; max-height: 90vh; display: flex; flex-direction: column;}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:17px 18px;border-bottom:1px solid var(--line)}
+  .modal-head strong{font-size:14px}
+  .close{border:0;background:transparent;color:#aeb4bd;font-size:22px;line-height:1}
+  .modal-body{padding:18px; overflow-y:auto;}
+  .field{display:grid;gap:7px;margin-bottom:15px}
+  .field label{font-size:11px;color:#b6bbc3;text-transform:uppercase;letter-spacing:.09em}
+  .field input{
+    width:100%;background:#0d0f12;color:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px;outline:none
+  }
+  .field input:focus{border-color:#646a74}
+  .drop{
+    border:1px dashed #3a3f49;background:#0d0f12;border-radius:14px;padding:27px 16px;text-align:center;
+  }
+  .drop.drag{border-color:#fff;background:#16191e}
+  .drop strong{display:block;font-size:13px}
+  .drop p{font-size:11px;color:var(--muted);margin:7px 0 13px}
+  .drop input{display:none}
+  
+  /* ESTILOS DA LISTA DE AMBIENTES MULTIPLOS */
+  .file-list { margin-top: 15px; display: grid; gap: 8px; }
+  .file-item { display:flex; gap:12px; align-items:center; background:#191c21; padding:10px; border-radius:12px; border:1px solid var(--line); }
+  .file-item img { width:48px; height:48px; border-radius:8px; object-fit:cover; }
+  .file-item input { flex:1; background:#0d0f12; border:1px solid var(--line); color:#fff; padding:10px 12px; border-radius:8px; font-size:12px; outline:none; }
+  .file-item input:focus { border-color:#646a74; }
+  
+  .modal-foot{padding:18px; border-top:1px solid var(--line); display:flex; justify-content:flex-end; gap:8px}
+  
+  /* VISUALIZADOR E BARRA DE NAVEGAÇÃO */
+  .viewer{ position:fixed; inset:0; background:#000; display:none; z-index:70; }
+  .viewer.open{display:block}
+  #viewerCanvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+  .viewer-top{ position:absolute; left:18px; right:18px; top:18px; display:flex; align-items:center; justify-content:space-between; pointer-events:none; }
+  .viewer-top > *{pointer-events:auto}
+  .viewer-title{background:rgba(10,11,14,.68);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(12px);padding:10px 12px;border-radius:12px}
+  .viewer-title strong{font-size:12px}
+  .viewer-title span{font-size:10px;color:#aeb4bd;margin-left:8px;text-transform:uppercase;letter-spacing:1px;}
+  .viewer-close{border:1px solid rgba(255,255,255,.13);background:rgba(10,11,14,.68);color:#fff;border-radius:10px;padding:10px 12px}
+  
+  .viewer-nav { position:absolute; bottom:24px; left:50%; transform:translateX(-50%); display:flex; gap:8px; background:rgba(10,11,14,.68); padding:8px; border-radius:14px; backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.13); max-width:90%; overflow-x:auto; pointer-events:auto;}
+  .viewer-nav button { background:transparent; border:0; color:#aeb4bd; padding:10px 16px; border-radius:10px; font-size:12px; font-weight:600; white-space:nowrap; transition:.2s; }
+  .viewer-nav button.active, .viewer-nav button:hover { background:rgba(255,255,255,.15); color:#fff; }
+
+  .toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);opacity:0;background:#fff;color:#0a0b0d;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;transition:.25s;z-index:100; pointer-events:none;}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  @media(max-width:800px){
+    .sidebar{width:72px;padding:20px 10px}
+    .brand-copy,.sidebar nav button span,.sidebar-footer{display:none}
+    .brand{padding:4px 7px 26px}
+    nav button{text-align:center;padding:12px 6px}
+    .main{margin-left:72px;padding:18px}
+    .grid-stats{grid-template-columns:1fr}
+    .topbar{align-items:flex-start;flex-direction:column}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">CY</div>
+      <div class="brand-copy"><strong>CY ARQUITETURA</strong><span>Experiências 360°</span></div>
+    </div>
+    <nav>
+      <button class="active" data-section="dashboard">◈ <span>Projetos 360°</span></button>
+      <button onclick="openAdd()">＋ <span>Novo projeto</span></button>
+      <button onclick="showAbout()">ⓘ <span>Sobre o sistema</span></button>
+    </nav>
+    <div class="sidebar-footer">Painel alojado na Web<br>CY Arquitetura</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="eyebrow">Painel de visualização</div>
+        <h1>Projetos 360°</h1>
+      </div>
+      <div class="top-actions">
+        <button class="btn primary" onclick="openAdd()">+ Criar Tour Virtual</button>
+      </div>
+    </div>
+
+    <div class="grid-stats">
+      <div class="stat"><span>Projetos (Tours)</span><strong id="count">0</strong></div>
+      <div class="stat"><span>Último projeto</span><strong id="last" style="font-size:18px">—</strong></div>
+      <div class="stat"><span>Armazenamento</span><strong style="font-size:18px">ImgBB (Nuvem)</strong></div>
+    </div>
+
+    <div class="section-head">
+      <div><h2>O seu catálogo</h2><p>Abra, visualize ou partilhe tours multicena com os seus clientes.</p></div>
+    </div>
+    <div id="projects" class="projects"></div>
+  </main>
+</div>
+
+<!-- Modal Novo Projeto -->
+<div id="modal" class="modal">
+  <div class="modal-card">
+    <div class="modal-head"><strong>Novo Tour Virtual 360°</strong><button class="close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Nome do Projeto (Ex: Residência Alves)</label>
+        <input id="projectName" type="text" maxlength="80" placeholder="Digite o nome principal do projeto..." />
+      </div>
+      <div id="drop" class="drop">
+        <strong>Selecione as fotos dos ambientes</strong>
+        <p>Pode selecionar vários ficheiros (Quarto, Sala, etc). Até 32MB por foto.</p>
+        <label class="btn" for="fileInput">Escolher Imagens</label>
+        <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+      </div>
+      
+      <!-- Lista onde aparecem as fotos escolhidas com campo de nome -->
+      <div id="fileList" class="file-list"></div>
+      
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button id="saveBtn" class="btn primary" onclick="saveProject()">Guardar Tour Completo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Visualizador 360 -->
+<div id="viewer" class="viewer">
+  <canvas id="viewerCanvas"></canvas>
+  <div class="viewer-top">
+    <div class="viewer-title">
+        <strong id="viewerName">Projeto</strong>
+        <span id="viewerEnv">Ambiente</span>
+    </div>
+    <button class="viewer-close" onclick="closeViewer()">Fechar Tour</button>
+  </div>
+  
+  <!-- Navegação entre quartos/ambientes -->
+  <div class="viewer-nav" id="viewerNav"></div>
+</div>
+
+<div id="about" class="modal">
+  <div class="modal-card">
+    <div class="modal-head"><strong>Sobre o sistema</strong><button class="close" onclick="document.getElementById('about').classList.remove('open')">×</button></div>
+    <div class="modal-body" style="color:#b9bec6;font-size:12px;line-height:1.7">
+      Esta versão inclui o <b>Tour Virtual Multicena</b>. Pode carregar várias imagens num só projeto, identificar cada ambiente (Quarto, Cozinha, Fachada), e o cliente conseguirá navegar por todas elas através de um menu dinâmico no mesmo link!
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- Importação do Three.js para o Visualizador -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+// ==========================================
+// CHAVE DA API DO IMGBB
+const IMGBB_API_KEY = "e0eda73472324c4a7cff8c0841956d57";
+// ==========================================
+
+const DB_NAME = "cy360db2"; // Atualizado para nova estrutura
+const STORE = "projects";
+let db;
+let projectsCache = [];
+let selectedFiles = []; // Agora guarda multiplos ficheiros
+let viewerState = null; // { name: '...', images: [...], currentIndex: 0 }
+
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(window.__toast); window.__toast=setTimeout(()=>el.classList.remove('show'),2200);
+}
+
+// Configuração do IndexedDB Local
+function openDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded=()=>req.result.createObjectStore(STORE,{keyPath:"id"});
+    req.onsuccess=()=>{db=req.result;resolve(db)};
+    req.onerror=()=>reject(req.error);
+  });
+}
+function getAll(){
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE,"readonly"); const s=tx.objectStore(STORE);
+    const r=s.getAll(); r.onsuccess=()=>resolve(r.result.sort((a,b)=>b.createdAt-a.createdAt)); r.onerror=()=>reject(r.error);
+  });
+}
+function put(item){
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE,"readwrite"); const r=tx.objectStore(STORE).put(item);
+    r.onsuccess=()=>resolve(); r.onerror=()=>reject(r.error);
+  });
+}
+function del(id){
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE,"readwrite"); const r=tx.objectStore(STORE).delete(id);
+    r.onsuccess=()=>resolve(); r.onerror=()=>reject(r.error);
+  });
+}
+
+// Renderizar Galeria (Cards)
+async function renderProjects(){
+  projectsCache=await getAll();
+  document.getElementById('count').textContent=projectsCache.length;
+  document.getElementById('last').textContent=projectsCache[0] ? projectsCache[0].name : "—";
+  const wrap=document.getElementById('projects');
+  if(!projectsCache.length){
+    wrap.innerHTML='<div class="empty"><strong>Nenhum projeto cadastrado</strong>Clique em "Criar Tour Virtual" para adicionar ambientes.</div>';
+    return;
+  }
+  wrap.innerHTML=projectsCache.map(p=>`
+    <article class="card">
+      <div class="thumb">
+        <img src="${p.images[0].url}" alt="${escapeHtml(p.name)}" crossorigin="anonymous">
+        <div class="badge">${p.images.length} Ambientes</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</div>
+        <div class="card-date">Criado em ${new Date(p.createdAt).toLocaleDateString('pt-PT')}</div>
+        <div class="card-actions">
+          <button class="btn primary" onclick="openViewer('${p.id}')">Ver Tour</button>
+          <button class="btn" onclick="shareProject('${p.id}')">Partilhar</button>
+          <button class="btn danger" onclick="removeProject('${p.id}')">Excluir</button>
+        </div>
+      </div>
+    </article>`).join('');
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+// ==== GESTÃO DE MÚLTIPLOS ARQUIVOS ====
+function openAdd(){
+  document.getElementById('modal').classList.add('open');
+  setTimeout(()=>document.getElementById('projectName').focus(),50);
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('projectName').value='';
+  document.getElementById('fileInput').value='';
+  selectedFiles=[];
+  renderFileList();
+}
+
+document.getElementById('fileInput').addEventListener('change',e=>{
+  adicionarArquivos(e.target.files);
+});
+const drop=document.getElementById('drop');
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
+drop.addEventListener('drop',e=>{
+  adicionarArquivos(e.dataTransfer.files);
+});
+
+function adicionarArquivos(files) {
+    for(let f of files) {
+        if(f.type.startsWith('image/')) {
+            selectedFiles.push({ file: f, label: '', preview: URL.createObjectURL(f) });
+        }
+    }
+    renderFileList();
+}
+
+function renderFileList() {
+    const list = document.getElementById('fileList');
+    list.innerHTML = selectedFiles.map((item, index) => `
+        <div class="file-item">
+            <img src="${item.preview}" alt="Preview">
+            <input type="text" placeholder="Nome do ambiente (Ex: Quarto Casal, Cozinha...)" 
+                   value="${item.label}" onchange="selectedFiles[${index}].label = this.value">
+            <button class="close" onclick="removerArquivo(${index})" title="Remover">&times;</button>
+        </div>
+    `).join('');
+}
+
+window.removerArquivo = function(index) {
+    selectedFiles.splice(index, 1);
+    renderFileList();
+};
+
+// Envio para a API do ImgBB (Sequencial)
+async function saveProject(){
+  const name=document.getElementById('projectName').value.trim();
+  if(!name) return toast('Digite o nome do projeto.');
+  if(selectedFiles.length === 0) return toast('Selecione pelo menos um ambiente 360°.');
+
+  const btn = document.getElementById('saveBtn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+
+  let imagensSalvas = [];
+
+  // Enviar cada imagem uma por uma para o ImgBB
+  for (let i = 0; i < selectedFiles.length; i++) {
+      let f = selectedFiles[i];
+      btn.textContent = `A enviar ${i+1} de ${selectedFiles.length}... Aguarde`;
+
+      const formData = new FormData();
+      formData.append("image", f.file);
+
+      try {
+          const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: formData });
+          const json = await res.json();
+          if (json.success) {
+              imagensSalvas.push({
+                  label: f.label.trim() || `Ambiente ${i+1}`,
+                  url: json.data.url
+              });
+          } else {
+              throw new Error("Erro no ImgBB");
+          }
+      } catch (e) {
+          toast(`Erro ao enviar a imagem ${i+1}. Tente novamente.`);
+          btn.textContent = originalText;
+          btn.disabled = false;
+          return; // Para o processo
+      }
+  }
+
+  // Guardar no banco de dados local com o array de imagens
+  await put({id:crypto.randomUUID(), name: name, images: imagensSalvas, createdAt:Date.now()});
+  closeModal();
+  await renderProjects();
+  toast('Tour salvo com sucesso!');
+  btn.textContent = originalText;
+  btn.disabled = false;
+}
+
+async function removeProject(id){
+  const p=projectsCache.find(x=>x.id===id);
+  if(!p) return;
+  if(!confirm(`Excluir tour completo de "${p.name}"?`)) return;
+  await del(id); await renderProjects(); toast('Tour eliminado.');
+}
+
+// ==== PARTILHA INTELIGENTE (MÚLTIPLOS AMBIENTES NO LINK) ====
+// Transforma os dados em texto comprimido para o URL não ficar gigante
+function encodeData(obj) {
+    return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+}
+function decodeData(b64) {
+    return JSON.parse(decodeURIComponent(escape(atob(b64))));
+}
+
+async function shareProject(id){
+  const p=projectsCache.find(x=>x.id===id); if(!p)return;
+  
+  // Extrai apenas os rótulos e URLs para poupar espaço no link
+  const dadosEnxutos = p.images.map(img => ({ l: img.label, u: img.url }));
+  const linkDados = encodeData(dadosEnxutos);
+  
+  const publicLink = location.href.split('?')[0].split('#')[0] + '?p=' + encodeURIComponent(p.name) + '&t=' + linkDados;
+  
+  const shareData={title:`Tour 360°: ${p.name}`, text:`Viaje pelos ambientes do projeto ${p.name}.`, url: publicLink};
+  if(navigator.share){
+    try{await navigator.share(shareData)}catch(e){}
+  }else{
+    await navigator.clipboard.writeText(publicLink);
+    toast('Link copiado! Envie ao cliente para aceder ao Tour.');
+  }
+}
+
+// ==== VISUALIZADOR 360 ====
+let scene,camera,renderer,sphere,texture;
+const state={yaw:0,pitch:0,fov:75,drag:false,lastX:0,lastY:0};
+
+function initViewer(){
+  const canvas=document.getElementById('viewerCanvas');
+  if(!scene) scene=new THREE.Scene();
+  if(!camera) camera=new THREE.PerspectiveCamera(state.fov,innerWidth/innerHeight,.1,1100);
+  camera.position.set(0,0,0.01);
+  if(!renderer) {
+      renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+      renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+      renderer.setSize(innerWidth,innerHeight);
+      animate();
+  }
+}
+function animate(){
+  requestAnimationFrame(animate);
+  if(!viewerState) return;
+  const phi=THREE.MathUtils.degToRad(90-state.pitch);
+  const theta=THREE.MathUtils.degToRad(state.yaw);
+  const x=Math.sin(phi)*Math.cos(theta), y=Math.cos(phi), z=Math.sin(phi)*Math.sin(theta);
+  camera.lookAt(x,y,z);
+  camera.fov=state.fov; camera.updateProjectionMatrix();
+  renderer.render(scene,camera);
+}
+
+function load360(image){
+  const loader = new THREE.TextureLoader();
+  loader.setCrossOrigin('anonymous');
+  
+  texture=loader.load(image,()=>{
+    if(sphere){scene.remove(sphere);sphere.geometry.dispose();sphere.material.dispose();}
+    sphere=new THREE.Mesh(new THREE.SphereGeometry(100,96,64),new THREE.MeshBasicMaterial({map:texture,side:THREE.BackSide}));
+    sphere.scale.x=-1; scene.add(sphere);
+    state.yaw = 0; state.pitch = 0; state.fov = 75; // Reseta visão ao trocar quarto
+  });
+}
+
+// Carrega uma cena específica do Tour
+window.mudarCena = function(index) {
+    if(!viewerState || !viewerState.images[index]) return;
+    viewerState.currentIndex = index;
+    
+    const ambiente = viewerState.images[index];
+    document.getElementById('viewerName').textContent = viewerState.name;
+    document.getElementById('viewerEnv').textContent = ambiente.label || ambiente.l;
+    
+    load360(ambiente.url || ambiente.u);
+    
+    // Atualiza botão ativo na navegação inferior
+    const botoes = document.getElementById('viewerNav').children;
+    for(let i=0; i<botoes.length; i++){
+        botoes[i].classList.toggle('active', i === index);
+    }
+}
+
+function openViewer(id){
+  const p=projectsCache.find(x=>x.id===id); if(!p)return;
+  document.getElementById('viewer').classList.add('open');
+  viewerState = { name: p.name, images: p.images, currentIndex: 0 };
+  
+  initViewer();
+  montarMenuNavegacao();
+  mudarCena(0); // Abre o primeiro quarto
+}
+
+function montarMenuNavegacao() {
+    const nav = document.getElementById('viewerNav');
+    if(viewerState.images.length <= 1) {
+        nav.style.display = 'none'; // Esconde menu se só tiver 1 foto
+        return;
+    }
+    nav.style.display = 'flex';
+    nav.innerHTML = viewerState.images.map((img, index) => {
+        const nome = img.label || img.l || `Amb. ${index+1}`;
+        return `<button onclick="mudarCena(${index})">${escapeHtml(nome)}</button>`;
+    }).join('');
+}
+
+function closeViewer(){
+  document.getElementById('viewer').classList.remove('open');
+  viewerState=null;
+}
+const canvas=document.getElementById('viewerCanvas');
+canvas.addEventListener('pointerdown',e=>{state.drag=true;state.lastX=e.clientX;state.lastY=e.clientY;canvas.setPointerCapture(e.pointerId)});
+canvas.addEventListener('pointermove',e=>{
+  if(!state.drag)return;
+  const dx=e.clientX-state.lastX,dy=e.clientY-state.lastY;
+  state.yaw-=dx*.16;state.pitch-=dy*.12;state.pitch=Math.max(-85,Math.min(85,state.pitch));
+  state.lastX=e.clientX;state.lastY=e.clientY;
+});
+canvas.addEventListener('pointerup',()=>state.drag=false);
+canvas.addEventListener('pointercancel',()=>state.drag=false);
+canvas.addEventListener('wheel',e=>{e.preventDefault();state.fov=Math.max(40,Math.min(95,state.fov+e.deltaY*.04))},{passive:false});
+window.addEventListener('resize',()=>{
+  if(renderer){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+});
+
+function showAbout(){document.getElementById('about').classList.add('open')}
+window.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeViewer();closeModal();document.getElementById('about').classList.remove('open')}
+});
+
+// Inicialização: Verifica se é Admin (Painel) ou Cliente (Apenas visualizador)
+(async()=>{
+  const urlParams = new URLSearchParams(window.location.search);
+  const tourData = urlParams.get('t'); // Pega os dados empacotados
+  const clientName = urlParams.get('p') || 'Tour 360°';
+
+  if (tourData) {
+      // MODO CLIENTE: Esconde o painel principal e o botão fechar
+      document.querySelector('.app').style.display = 'none';
+      const closeBtn = document.querySelector('.viewer-close');
+      if(closeBtn) closeBtn.style.display = 'none';
+
+      // Abre o Tour em ecrã inteiro
+      const imagensExtraidas = decodeData(tourData);
+      viewerState = { name: clientName, images: imagensExtraidas, currentIndex: 0 };
+      
+      document.getElementById('viewer').classList.add('open');
+      initViewer();
+      montarMenuNavegacao();
+      mudarCena(0);
+  } else {
+      // MODO ADMIN: Carrega o painel normal
+      await openDB(); await renderProjects();
+  }
+})();
+</script>
+</body>
+</html>
